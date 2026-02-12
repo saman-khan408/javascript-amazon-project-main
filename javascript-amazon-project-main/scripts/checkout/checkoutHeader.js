@@ -2,7 +2,7 @@ import { cart } from "../../data/cart.js";
 export function renderCheckoutHeader() {
   let cartQuantity = 0;
   cart.forEach((cartItem) => {
-    cartQuantity += cartItem.quantity;
+    cartQuantity += Number(cartItem.quantity) || 0;
   });
   const checkoutHTML = `
       <div class="header-content">
