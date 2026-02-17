@@ -4,16 +4,19 @@ import {
   removeFromCart,
   calculateCartQuantity,
   updateQuantity,
-  updateDeliveryOptions
+  updateDeliveryOptions,
 } from "../../data/cart.js";
 import { formatCurrency } from "../utils/money.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
-import { deliveryOptions,getDeliveryOption,calculateDeliveryDate } from "../../data/deliveryOptions.js";
+import {
+  deliveryOptions,
+  getDeliveryOption,
+  calculateDeliveryDate,
+} from "../../data/deliveryOptions.js";
 import { renderPaymentSummary } from "./paymentSummery.js";
 import { renderCheckoutHeader } from "./checkoutHeader.js";
 
-
-export function renderOrderSummary(){
+export function renderOrderSummary() {
   let cartSummaryHTML = "";
 
   cart.forEach((cartItem) => {
@@ -23,7 +26,6 @@ export function renderOrderSummary(){
     const deliveryOptionId = cartItem.deliveryOptionId;
     const deliveryOption = getDeliveryOption(deliveryOptionId);
 
-    
     const dateString = calculateDeliveryDate(deliveryOption);
     cartSummaryHTML += `
       <div class=" js-cart-item-container js-cart-item-container-${matchingProducts.id}">
@@ -72,17 +74,16 @@ export function renderOrderSummary(){
   function deliveryOptionsHTML(matchingProducts, cartItem) {
     let html = "";
     deliveryOptions.forEach((deliveryOption) => {
-      
-      const dateString = calculateDeliveryDate(deliveryOption)
+      const dateString = calculateDeliveryDate(deliveryOption);
       const priceString =
         deliveryOption.priceCents === 0
           ? "FREE"
           : `$${formatCurrency(deliveryOption.priceCents)} -`;
       const isCheked = deliveryOption.id === cartItem.deliveryOptionId;
-      html += `<div class="delivery-option js-delivery-option" data-product-id="${matchingProducts.id}" data-delivery-option-id="${deliveryOption.id}">
+      html += `<div class="delivery-option js-delivery-option js-delivery-option-${matchingProducts.id}-${deliveryOption.id}" data-product-id="${matchingProducts.id}" data-delivery-option-id="${deliveryOption.id}">
                     <input type="radio"
                     ${isCheked ? "checked" : ""}
-                      class="delivery-option-input"
+                      class="delivery-option-input js-delivery-option-input-${matchingProducts.id}-${deliveryOption.id}"
                       name="delivery-option-${matchingProducts.id}">
                     <div>
                       <div class="delivery-option-date">
@@ -184,9 +185,9 @@ export function renderOrderSummary(){
     });
   });
 
-  document.querySelectorAll('.js-delivery-option').forEach((element) => {
-    element.addEventListener('click',() => {
-      const{productId,deliveryOptionId} = element.dataset;
+  document.querySelectorAll(".js-delivery-option").forEach((element) => {
+    element.addEventListener("click", () => {
+      const { productId, deliveryOptionId } = element.dataset;
       updateDeliveryOptions(productId, deliveryOptionId);
       renderOrderSummary();
       renderPaymentSummary();
