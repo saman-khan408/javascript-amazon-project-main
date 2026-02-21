@@ -58,4 +58,3 @@ export function renderPaymentSummary() {
   document.querySelector('.js-payment-summary').innerHTML = paymentSummeryHTML;
   
 }
-console.log(cart)
