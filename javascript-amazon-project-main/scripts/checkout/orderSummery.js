@@ -1,11 +1,5 @@
 import { products, getProduct } from "../../data/products.js";
-import {
-  cart,
-  removeFromCart,
-  calculateCartQuantity,
-  updateQuantity,
-  updateDeliveryOptions,
-} from "../../data/cart.js";
+
 import { formatCurrency } from "../utils/money.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
 import {
@@ -14,12 +8,13 @@ import {
   calculateDeliveryDate,
 } from "../../data/deliveryOptions.js";
 import { renderPaymentSummary } from "./paymentSummery.js";
+import {cart} from '../../data/cart-class.js'
 import { renderCheckoutHeader } from "./checkoutHeader.js";
 
 export function renderOrderSummary() {
   let cartSummaryHTML = "";
 
-  cart.forEach((cartItem) => {
+  cart.cartItems.forEach((cartItem) => {
     const productId = cartItem.productId;
 
     const matchingProducts = getProduct(productId);
@@ -104,7 +99,7 @@ export function renderOrderSummary() {
   document.querySelectorAll(".js-delete-link").forEach((link) => {
     link.addEventListener("click", () => {
       const productId = link.dataset.productId;
-      removeFromCart(productId);
+      cart.removeFromCart(productId);
 
       const container = document.querySelector(
         `.js-cart-item-container-${productId}`,
@@ -118,7 +113,7 @@ export function renderOrderSummary() {
     });
   });
   function updateCartQuantity() {
-    const cartQuantity = calculateCartQuantity();
+    const cartQuantity = cart.calculateCartQuantity();
     document.querySelector(".js-return-to-home-link").innerHTML =
       `${cartQuantity} items`;
   }
@@ -148,7 +143,7 @@ export function renderOrderSummary() {
         alert("Quantity must be atleast 0");
         return;
       }
-      updateQuantity(productId, newQuantity);
+      cart.updateQuantity(productId, newQuantity);
 
       const quantityLabel = document.querySelector(
         `.js-quantity-label-${productId}`,
@@ -174,7 +169,7 @@ export function renderOrderSummary() {
           alert("Quantity must be atleast 0");
           return;
         }
-        updateQuantity(productId, newQuantity);
+        cart.updateQuantity(productId, newQuantity);
 
         const quantityLabel = document.querySelector(
           `.js-quantity-label-${productId}`,
@@ -188,7 +183,7 @@ export function renderOrderSummary() {
   document.querySelectorAll(".js-delivery-option").forEach((element) => {
     element.addEventListener("click", () => {
       const { productId, deliveryOptionId } = element.dataset;
-      updateDeliveryOptions(productId, deliveryOptionId);
+      cart.updateDeliveryOptions(productId, deliveryOptionId);
       renderOrderSummary();
       renderPaymentSummary();
     });
