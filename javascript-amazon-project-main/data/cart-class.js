@@ -108,5 +108,3 @@ class Cart {
 export const cart = new Cart('cart');
 const buisnessCart = new Cart('cart-buisness');
 
-console.log(cart);
-console.log(buisnessCart);
