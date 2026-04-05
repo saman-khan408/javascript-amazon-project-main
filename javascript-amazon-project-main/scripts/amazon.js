@@ -11,7 +11,13 @@ function renderProductsGrid() {
 
   if (search) {
     filterProducts = products.filter((product) => {
-      return product.name.toLowerCase().includes(search.toLowerCase());
+      let matchingKeyword = false;
+      product.keywords.forEach((keyword) => {
+        if (keyword.toLowerCase().includes(search.toLowerCase())) {
+          matchingKeyword = true;
+        }
+      });
+      return matchingKeyword || product.name.toLowerCase().includes(search.toLowerCase());
     });
   }
   filterProducts.forEach((product) => {
@@ -83,7 +89,6 @@ function renderProductsGrid() {
       cart.addToCart(productId, quantity);
       updateCartQuantity();
 
-      
       const msg = document.querySelector(`.js-added-msg-${productId}`);
       msg.style.opacity = 1;
       if (addedMessageTimeout[productId]) {
@@ -98,4 +103,11 @@ function renderProductsGrid() {
     const search = document.querySelector(".js-search-bar").value;
     window.location.href = `amazon.html?search=${search}`;
   });
+    const searchInput = document.querySelector('.js-search-bar');
+    searchInput.addEventListener('keydown',(event) => {
+      if(event.key === 'Enter'){
+        const search = searchInput.value;
+        window.location.href = `amazon.html?search=${search}`;
+      }
+    })
 }
