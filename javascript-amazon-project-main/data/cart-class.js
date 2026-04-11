@@ -26,6 +26,10 @@ class Cart {
       ];
     }
   }
+  resetCart(){
+    this.cartItems = [];
+    this.saveToStorage();
+  }
 
   saveToStorage() {
     localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));

@@ -19,6 +19,10 @@ if (!cart) {
   ];
 }
 }
+export function resetCart(){
+  cart = [];
+  saveToStorage();
+}
 export function cartQuantitySelector(productId) {
   const quantitySelector = document.querySelector(
     `.js-quantity-selector-${productId}`,
