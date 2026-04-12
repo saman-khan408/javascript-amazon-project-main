@@ -58,21 +58,24 @@ export function renderPaymentSummary() {
   document
     .querySelector(".js-place-order")
     .addEventListener("click", async () => {
-      try{
+      const button = document.querySelector('.js-place-order');
+      button.disabled = true
+      try {
         const response = await fetch("https://supersimplebackend.dev/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          cart: cart.cartItems,
-        }),
-      });
-      const order = await response.json();
-      addOrder(order);
-      }catch(error){
-        alert('Unexpeted error. Try again later.')
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cart: cart.cartItems,
+          }),
+        });
+        const order = await response.json();
+        addOrder(order);
+      } catch (error) {
+        alert("Unexpected error. Try again later.");
       }
-      window.location.href= 'orders.html'
+      cart.resetCart();
+      window.location.href = "orders.html";
     });
 }
